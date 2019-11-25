@@ -19,7 +19,9 @@ public class UsersController {
 	public ResponseEntity<String> status() {
 		System.out.println("HB");
 		System.out.println(env.getProperty("server.port"));
-		return new ResponseEntity<String>(env.getProperty("server.port").toString(), HttpStatus.OK);
+		return new ResponseEntity<String>(env.getProperty("spring.application.name")+" running on "+env.getProperty("server.port").toString(), HttpStatus.OK);
+		
+		
 	}
 
 }
