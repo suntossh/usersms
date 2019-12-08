@@ -2,6 +2,9 @@ package com.suntossh.springboot.users.controller;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.suntossh.springboot.users.model.UserRequestModel;
+import com.suntossh.springboot.users.service.UsersService;
+import com.suntossh.springboot.users.shared.UsersDto;
 
 @RestController
 @RequestMapping("/users")
@@ -20,6 +25,9 @@ public class UsersController {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private UsersService usersSvcImpl;
 
 	@GetMapping("/status/check")
 	public ResponseEntity<String> status() {
@@ -32,7 +40,11 @@ public class UsersController {
 	@PostMapping()
 	public ResponseEntity<String> create(@Valid @RequestBody UserRequestModel userRequest){
 		System.out.println(userRequest.toString());
-		return new ResponseEntity<String>("Created user with ID ", HttpStatus.OK);
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		UsersDto usersDto = mapper.map(userRequest, UsersDto.class);
+		usersDto = usersSvcImpl.create(usersDto);
+		return new ResponseEntity<String>("Created user with ID "+usersDto.getUserid(), HttpStatus.OK);
 	}
 	
 }
