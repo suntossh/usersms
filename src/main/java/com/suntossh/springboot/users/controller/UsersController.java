@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.suntossh.springboot.users.model.UserRequestModel;
+import com.suntossh.springboot.users.model.UserResponseModel;
 import com.suntossh.springboot.users.service.UsersService;
 import com.suntossh.springboot.users.shared.UsersDto;
 
@@ -25,7 +26,7 @@ public class UsersController {
 
 	@Autowired
 	private Environment env;
-	
+
 	@Autowired
 	private UsersService usersSvcImpl;
 
@@ -33,18 +34,19 @@ public class UsersController {
 	public ResponseEntity<String> status() {
 		System.out.println("HB");
 		System.out.println(env.getProperty("local.server.port"));
-		return new ResponseEntity<String>(env.getProperty("spring.application.name")+" running on "+env.getProperty("local.server.port").toString(), HttpStatus.OK);
+		return new ResponseEntity<String>(env.getProperty("spring.application.name") + " running on "
+				+ env.getProperty("local.server.port").toString(), HttpStatus.OK);
 	}
 
-	
 	@PostMapping()
-	public ResponseEntity<String> create(@Valid @RequestBody UserRequestModel userRequest){
+	public ResponseEntity<UserResponseModel> create(@Valid @RequestBody UserRequestModel userRequest) {
 		System.out.println(userRequest.toString());
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		UsersDto usersDto = mapper.map(userRequest, UsersDto.class);
 		usersDto = usersSvcImpl.create(usersDto);
-		return new ResponseEntity<String>("Created user with ID "+usersDto.getUserid(), HttpStatus.OK);
+		UserResponseModel responseModel = mapper.map(usersDto, UserResponseModel.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
 	}
-	
+
 }
