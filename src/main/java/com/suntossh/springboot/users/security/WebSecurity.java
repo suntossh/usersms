@@ -13,12 +13,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	Environment environment;
-	
+
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();// Not 100% sure
 		http.headers().frameOptions().disable();// enables h2 console to display
-		http.authorizeRequests().antMatchers("/**").hasIpAddress(environment.getProperty("gateway.ip"));// this will allow un authenticated following url
-																		// patters to be allowed
+		http.authorizeRequests().antMatchers("/**").hasIpAddress(environment.getProperty("gateway.ip"))// this will
+																										// allow un
+																										// authenticated
+																										// following
+																										// url// patters
+																										// to be//
+																										// allowed
+				.and().addFilter(new AuthenticationFilter());
+
 	}
 
 }
