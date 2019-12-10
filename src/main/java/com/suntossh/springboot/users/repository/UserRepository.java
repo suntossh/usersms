@@ -7,4 +7,6 @@ import com.suntossh.springboot.users.Entity.UsersEntity;
 
 @Repository
 public interface UserRepository extends CrudRepository<UsersEntity, Long> {
+
+	UsersEntity findByEmail(String emailId);
 }
