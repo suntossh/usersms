@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suntossh.springboot.users.Entity.UsersEntity;
 import com.suntossh.springboot.users.repository.UserRepository;
 import com.suntossh.springboot.users.shared.UsersDto;

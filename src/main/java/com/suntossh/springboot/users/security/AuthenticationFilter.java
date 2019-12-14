@@ -28,12 +28,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	@Autowired
 	Environment environment;
 
-	@Autowired
 	UsersService usersServiceImpl;
-
+	
+	@Autowired
 	public AuthenticationFilter(Environment environment, UsersService usersServiceImpl,
 			AuthenticationManager authenticationManager) {
 		this.environment = environment;
