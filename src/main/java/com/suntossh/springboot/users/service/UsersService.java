@@ -8,4 +8,6 @@ public interface UsersService extends UserDetailsService{
 	
 	public UsersDto create(UsersDto users);
 
+	public UsersDto loadUserByEmailId(String userEmail);
+
 }

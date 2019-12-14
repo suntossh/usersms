@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suntossh.springboot.users.Entity.UsersEntity;
 import com.suntossh.springboot.users.repository.UserRepository;
 import com.suntossh.springboot.users.shared.UsersDto;
@@ -40,8 +41,18 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UsersEntity usersEntity = userRepository.findByEmail(username);
-		if(usersEntity == null) throw new UsernameNotFoundException(username);
-		return new User(usersEntity.getEmail(), usersEntity.getEncryptedPwd(), true, true, true, true, new ArrayList<>());
+		if (usersEntity == null)
+			throw new UsernameNotFoundException(username);
+		return new User(usersEntity.getEmail(), usersEntity.getEncryptedPwd(), true, true, true, true,
+				new ArrayList<>());
+	}
+
+	@Override
+	public UsersDto loadUserByEmailId(String userEmail) {
+		UsersEntity usersEntity = userRepository.findByEmail(userEmail);
+		if (usersEntity == null)
+			throw new UsernameNotFoundException(userEmail);
+		return new ModelMapper().map(usersEntity, UsersDto.class);
 	}
 
 }
